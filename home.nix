@@ -1,5 +1,4 @@
-{ inputs, ... }:
-{
+{ inputs, ... }: {
   imports = [
     inputs.nix-colors.homeManagerModules.default
     ./modules/desktops/i3.nix
@@ -20,9 +19,7 @@
   home.homeDirectory = "/home/dusk";
 
   # Variables
-  home.sessionVariables = {
-    EDITOR = "nvim";
-  };
+  home.sessionVariables = { EDITOR = "nvim"; };
 
   # Version
   home.stateVersion = "24.05"; # Please read the comment before changing.

@@ -54,7 +54,7 @@
           notification = false;
         }
         {
-          command = "${pkgs.feh}/bin/feh --bg-scale ~/background.jpg";
+          command = "${pkgs.feh}/bin/feh --bg-fill ~/.background";
           always = true;
           notification = false;
         }

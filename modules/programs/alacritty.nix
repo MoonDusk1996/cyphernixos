@@ -14,9 +14,9 @@
         };
       };
 
-      font = {
-      normal.family = "JetbrainsMono Nerd Font";
-      };
+      # font = {
+      # normal.family = "JetbrainsMono Nerd Font";
+      # };
 
       shell = { program = "${pkgs.zsh}/bin/zsh"; };
 

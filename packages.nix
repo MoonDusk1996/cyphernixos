@@ -32,4 +32,12 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+ # Instalar toolchain padrão
+  home.activation = {
+    installRustToolchain = ''
+      ${pkgs.rustup}/bin/rustup default stable
+      ${pkgs.rustup}/bin/rustup component add clippy
+    '';
+  };
 }
