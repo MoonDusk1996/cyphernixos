@@ -1,15 +1,7 @@
 { inputs, ... }: {
   imports = [
     inputs.nix-colors.homeManagerModules.default
-    ./modules/desktops/i3.nix
-    ./modules/programs/alacritty.nix
-    ./modules/programs/chromium.nix
-    ./modules/programs/cursor.nix
-    ./modules/programs/firefox.nix
-    ./modules/programs/git.nix
-    ./modules/programs/picom.nix
-    ./modules/programs/polybar.nix
-    ./modules/programs/zsh.nix
+    ./modules/desktops/i3/main.nix
     ./config.nix
     ./packages.nix
   ];

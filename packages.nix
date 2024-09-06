@@ -1,9 +1,11 @@
 { pkgs, ... }:
+let nerdFonts = pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; };
+in {
+  imports = [ ./modules/programs/main.nix ];
 
-{
   home.packages = with pkgs; [
     # DEV
-    nixfmt
+    nixfmt-classic
     gcc
     binutils
     rustup
@@ -26,18 +28,23 @@
     #kdeconnect
 
     # Fonts
-    meslo-lgs-nf
-    #nerdfonts
+    nerdFonts
   ];
 
+  fonts.fontconfig = { enable = true; };
+  services.kdeconnect = {
+    enable = true;
+    indicator = true;
+  };
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
- # Instalar toolchain padrão
+  # Instalar toolchain padrão
   home.activation = {
     installRustToolchain = ''
       ${pkgs.rustup}/bin/rustup default stable
       ${pkgs.rustup}/bin/rustup component add clippy
+      ${pkgs.rustup}/bin/rustup component add rustfmt
     '';
   };
 }

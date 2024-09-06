@@ -1,16 +1,15 @@
-{ lib, pkgs, config, ... }:
-{
-  home.packages = with pkgs; [
-    ranger
-    flameshot
-    feh
-    pasystray
-    rofi
-  ];
+{ lib, pkgs, config, ... }: {
+  home.packages = with pkgs; [ flameshot feh pasystray rofi ];
+  imports = [ ./cursor.nix ./picom.nix ./polybar.nix ];
 
   xsession.windowManager.i3 = with config.colorScheme.palette; {
     enable = true;
     package = pkgs.i3-gaps;
+    extraConfig = ''
+      workspace 1 output HDMI-0
+      for_window [class="feh"] floating enable, move position center
+      for_window [class="vlc"] floating enable, move position center
+    '';
     config = rec {
       colors.focused.background = "#${base00}";
       colors.focused.border = "#${base02}";
@@ -22,7 +21,6 @@
 
       window.border = 1;
       window.titlebar = false;
-
       gaps = {
         inner = 7;
         outer = 0;
@@ -30,9 +28,12 @@
       };
 
       keybindings = lib.mkOptionDefault {
-        "XF86AudioMute" = "exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status";
-        "XF86AudioLowerVolume" = "exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status";
-        "XF86AudioRaiseVolume" = "exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status";
+        "XF86AudioMute" =
+          "exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status";
+        "XF86AudioLowerVolume" =
+          "exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status";
+        "XF86AudioRaiseVolume" =
+          "exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status";
         "${modifier}+Return" = "exec ${pkgs.alacritty}/bin/alacritty";
         "${modifier}+q" = "kill";
         "${modifier}+Shift+r" = "restart";

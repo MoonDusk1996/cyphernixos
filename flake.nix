@@ -27,11 +27,11 @@
 
       };
       # Container configuration with nix-bitcoin
-      mynode = extra-container.lib.buildContainers {
+      bitcoinhub = extra-container.lib.buildContainers {
         inherit system;
 
         config = {
-          containers.mynode = {
+          containers.bitcoinhub = {
             # Always start container along with the container host
             autoStart = true;
 
@@ -44,8 +44,8 @@
             extra.enableWAN = true;
 
             # Map `/my/host/dir` to `/my/mount` in the container
-            bindMounts."/mnt/" = {
-              hostPath = "/mnt/";
+            bindMounts."/bitcoin-server" = {
+              hostPath = "/mnt/ciberia/bitcoin-server/";
               isReadOnly = false;
             };
 
@@ -63,12 +63,14 @@
               # See ../configuration.nix for all available features.
               services.bitcoind = {
                 enable = true;
-                dataDir = "/mnt/ciberia/bitcoin-server/bitcoin-node";
+                dataDir = "/bitcoin-server/bitcoin-node";
               };
               services.electrs = {
                 enable = true;
-                dataDir = "/mnt/ciberia/bitcoin-server/electrs/";
+                dataDir = "/bitcoin-server/electrs/";
               };
+              # services.electrum = { emable = true; };
+              # services.mempool = { enable = true; };
             };
           };
         };

@@ -2,18 +2,17 @@
 {
   programs.chromium = {
     enable = true;
-    dictionaries = with pkgs;
+       dictionaries = with pkgs;
       [
         hunspellDictsChromium.en_US
       ];
     extensions = [
       # Crypto wallet
-      "ihcjicgdanjaechkgeegckofjjedodee" #Alby
+      "iokeahhehimjnekafflcihljlcjccdbe" #Alby
       "nkbihfbeogaeaoehlefnkodbefgpgknn" #Meetamask
       "bfnaelmomeimhlpmgjnjophhpkkoljpa" #Phantom
 
       # Misc
-      "cimiefiiaegbelhefglklhhakcgmhkai" #Plasma integration
       "bgnkhhnnamicmpeenaelnjfhikgbkllg" #Adguard
       "bhlhnicpbhignbdhedgjhgdocnmhomnp" #ColorZilla
     ];

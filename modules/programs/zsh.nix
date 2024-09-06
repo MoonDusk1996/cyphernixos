@@ -1,5 +1,4 @@
-{ config, pkgs, ... }:
-{
+{ config, pkgs, ... }: {
   programs.zsh = {
     enable = true;
     initExtra = "source ~/.p10k.zsh";
@@ -9,7 +8,8 @@
       la = "ls -al";
       update = "sudo nixos-rebuild switch";
       hm = "home-manager switch";
-      update-all = "sudo nixos-rebuild switch && home-manager switch && sudo reboot";
+      update-all =
+        "sudo nixos-rebuild switch && home-manager switch && sudo reboot";
     };
 
     history = {
