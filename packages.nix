@@ -11,8 +11,6 @@ in {
     rustup
     nodejs
 
-    # BLOCKCHAIN
-
     # DEFAULT
     neovim
     neofetch
@@ -20,6 +18,7 @@ in {
     dolphin
     btop
     zsh-powerlevel10k
+    tor-browser-bundle-bin
     pavucontrol
 
     # UTILS
