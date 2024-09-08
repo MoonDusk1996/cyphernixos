@@ -74,26 +74,25 @@
             # Setup port forwarding
             # forwardPorts = [ { containerPort = 80; hostPort = 8080; protocol = "tcp";} ];
 
-            config = { config, pkgs, ... }: {
-              imports = [ nix-bitcoin.nixosModules.default ];
+            imports = [ nix-bitcoin.nixosModules.default ];
 
-              # Automatically generate all secrets required by services.
-              # The secrets are stored in /etc/nix-bitcoin-secrets in the container
-              nix-bitcoin.generateSecrets = true;
+            # Automatically generate all secrets required by services.
+            # The secrets are stored in /etc/nix-bitcoin-secrets in the container
+            nix-bitcoin.generateSecrets = true;
 
-              # Enable some services.
-              # See ../configuration.nix for all available features.
-              services.bitcoind = {
-                enable = true;
-                dataDir = "/bitcoin-server/bitcoin-node";
-              };
-              services.electrs = {
-                enable = true;
-                dataDir = "/bitcoin-server/electrs/";
-              };
-              # services.electrum = { emable = true; };
-              # services.mempool = { enable = true; };
+            # Enable some services.
+            # See ../configuration.nix for all available features.
+            services.bitcoind = {
+              enable = true;
+              dataDir = "/bitcoin-server/bitcoin-node";
             };
+
+            services.electrs = {
+              enable = true;
+              dataDir = "/bitcoin-server/electrs/";
+            };
+            # services.electrum = { emable = true; };
+            # services.mempool = { enable = true; };
           };
         };
       };
