@@ -6,5 +6,6 @@
     ./chromium.nix
     ./alacritty.nix
     ./ranger.nix
+    ./nixvim.nix
   ];
 }

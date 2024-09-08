@@ -3,8 +3,14 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+
     home-manager = {
       url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nixvim = {
+      url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -15,17 +21,33 @@
     extra-container.follows = "nix-bitcoin/extra-container";
   };
 
-  outputs = { nixpkgs, nix-bitcoin, extra-container, home-manager, ... }@inputs:
+  outputs =
+    inputs@{ nixpkgs, nix-bitcoin, nixvim, extra-container, home-manager, ... }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
     in {
+      nixosConfigurations = {
+        lumia = nixpkgs.lib.nixosSystem {
+          inherit system;
+          modules = [
+            ./nixos/configuration.nix
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.sharedModules = [ nixvim.homeManagerModules.nixvim ];
+            }
+          ];
+        };
+      };
+
       homeConfigurations."dusk" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         extraSpecialArgs = { inherit inputs; };
         modules = [ ./home.nix ];
-
       };
+
       # Container configuration with nix-bitcoin
       bitcoinhub = extra-container.lib.buildContainers {
         inherit system;
