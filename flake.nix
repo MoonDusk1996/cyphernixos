@@ -22,11 +22,18 @@
   };
 
   outputs =
-    inputs@{ nixpkgs, nix-bitcoin, nixvim, extra-container, home-manager, ... }:
+    inputs @ { nixpkgs
+    , nix-bitcoin
+    , nixvim
+    , extra-container
+    , home-manager
+    , ...
+    }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
-    in {
+    in
+    {
       nixosConfigurations = {
         lumia = nixpkgs.lib.nixosSystem {
           inherit system;
@@ -34,9 +41,11 @@
             ./nixos/configuration.nix
             home-manager.nixosModules.home-manager
             {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.sharedModules = [ nixvim.homeManagerModules.nixvim ];
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                sharedModules = [ nixvim.homeManagerModules.nixvim ];
+              };
             }
           ];
         };
@@ -98,4 +107,3 @@
       };
     };
 }
-
