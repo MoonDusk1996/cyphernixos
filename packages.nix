@@ -1,6 +1,8 @@
 { pkgs, ... }:
-let nerdFonts = pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; };
-in {
+let
+  nerdFonts = pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; };
+in
+{
   imports = [ ./modules/programs/main.nix ];
 
   home.packages = with pkgs; [
@@ -12,7 +14,7 @@ in {
     nodejs
 
     # DEFAULT
-    neovim
+    # neovim
     neofetch
     vlc
     dolphin
