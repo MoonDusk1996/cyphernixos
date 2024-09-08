@@ -1,8 +1,8 @@
 { inputs, ... }: {
   imports = [
     inputs.nix-colors.homeManagerModules.default
+    inputs.nixvim.homeManagerModules.nixvim
     ./modules/desktops/i3/main.nix
-    ./config.nix
     ./packages.nix
   ];
 
@@ -10,10 +10,10 @@
   home.username = "dusk";
   home.homeDirectory = "/home/dusk";
 
-  # Variables
+  # Environment
   home.sessionVariables = { EDITOR = "nvim"; };
+  colorScheme = inputs.nix-colors.colorSchemes.standardized-dark;
 
   # Version
   home.stateVersion = "24.05"; # Please read the comment before changing.
 }
-
