@@ -3,6 +3,9 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    extra-container.follows = "nix-bitcoin/extra-container";
+    nix-colors.url = "github:misterio77/nix-colors";
+    nix-bitcoin.url = "github:fort-nix/nix-bitcoin/release";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -13,12 +16,6 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    nix-colors.url = "github:misterio77/nix-colors";
-
-    # Bitcoin
-    nix-bitcoin.url = "github:fort-nix/nix-bitcoin/release";
-    extra-container.follows = "nix-bitcoin/extra-container";
   };
 
   outputs =
@@ -51,21 +48,22 @@
         };
       };
 
-      homeConfigurations."dusk" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        extraSpecialArgs = { inherit inputs; };
-        modules = [ ./home.nix ];
+      homeConfigurations = {
+        dusk = home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          extraSpecialArgs = { inherit inputs; };
+          modules = [ ./home ];
+        };
       };
 
-      # Container configuration with nix-bitcoin
+      #Container configuration with nix-bitcoin
+      #TODO: module all containers.
       bitcoinhub = extra-container.lib.buildContainers {
         inherit system;
 
         config = {
           containers.bitcoinhub = {
-            # Always start container along with the container host
             autoStart = true;
-
             # This assigns the following addresses:
             # Host IP:      10.250.0.1
             # Container IP: 10.250.0.2
@@ -74,34 +72,357 @@
             # Enable internet access for the container
             extra.enableWAN = true;
 
-            # Map `/my/host/dir` to `/my/mount` in the container
-            bindMounts."/bitcoin-server" = {
-              hostPath = "/mnt/ciberia/bitcoin-server/";
+            # Map in the container
+            bindMounts."/bitcoind" = {
+              hostPath = "/mnt/ciberia/bitcoin_hub/bitcoind";
+              isReadOnly = false;
+            };
+            bindMounts."/electrs" = {
+              hostPath = "/mnt/ciberia/bitcoin_hub/electrs";
               isReadOnly = false;
             };
 
-            # Setup port forwarding
-            # forwardPorts = [ { containerPort = 80; hostPort = 8080; protocol = "tcp";} ];
+            config = {
+              imports = [
+                nix-bitcoin.nixosModules.default
+                (nix-bitcoin + "/modules/presets/enable-tor.nix")
+              ];
 
-            imports = [ nix-bitcoin.nixosModules.default ];
+              nix-bitcoin.operator = {
+                enable = true;
+                name = "dusk";
+              };
+              nix-bitcoin.generateSecrets = true;
+              services = {
+                bitcoind = {
+                  enable = true;
+                  dataDir = "/bitcoind";
+                };
+                # electrs = {
+                # enable = true;
+                # dataDir = "/bitcoin_hub/electrs/";
+                # };
+                # mempool = {
+                # enable = true;
+                # };
+              };
+            };
+          };
+        };
+      };
 
-            # Automatically generate all secrets required by services.
-            # The secrets are stored in /etc/nix-bitcoin-secrets in the container
-            nix-bitcoin.generateSecrets = true;
+      # TODO: create a nostr container with client and relay.
+      nostrhub = extra-container.lib.buildContainers {
+        inherit system;
+        config = {
+          containers.nostrhub = {
+            autoStart = true;
+            extra.addressPrefix = "10.251.0";
+            privateNetwork = true;
+            hostAddress = "10.251.0.1";
+            localAddress = "10.251.0.2";
 
-            # Enable some services.
-            # See ../configuration.nix for all available features.
-            services.bitcoind = {
-              enable = true;
-              dataDir = "/bitcoin-server/bitcoin-node";
+            forwardPorts = [
+              {
+                containerPort = 8080;
+                hostPort = 8080;
+                protocol = "tcp";
+              }
+            ];
+            extra.enableWAN = true;
+            bindMounts."/etc/nostr-rs-relay" = {
+              hostPath = "/mnt/ciberia/nostr_hub/nostr-rs-relay";
+              isReadOnly = false;
             };
 
-            services.electrs = {
-              enable = true;
-              dataDir = "/bitcoin-server/electrs/";
+            config = with pkgs; let
+              primal = fetchFromGitHub {
+                owner = "PrimalHQ";
+                repo = "primal-web-app";
+                rev = "ec836bab70ea7bda9a3e7e72c9429891b32cb6c8";
+                sha256 = "sha256-8oFGiCpthomnV3bv4sgJTJhl6uyXoqcXzp3BKMmiLDs=";
+              };
+            in
+            {
+              networking.firewall.enable = false;
+              environment.systemPackages = [
+                nostr-rs-relay
+                tor
+                (stdenv.mkDerivation {
+                  pname = "example-project";
+                  version = "1.0.0"; # versão do seu projeto
+
+                  src = primal;
+
+                  buildInputs = [ nodejs ]; # se o projeto requer Node.js
+
+                  buildPhase = ''
+                    ${nodejs}/bin/npm install
+                  '';
+                })
+              ];
+              environment.etc."/nostr-rs-relay/config.toml".text = ''
+                # Nostr-rs-relay configuration
+
+                [info]
+                # The advertised URL for the Nostr websocket.
+                relay_url = "wss://mycontayner.com/"
+
+                # Relay information for clients.  Put your unique server name here.
+                name = "cryptodusk-nostr-relay"
+
+                # Description
+                description = "relay by nostr-rs-relay and extra container for NixOS \nSee on https://github.com/MoonDusk1996/cryptodusk-nix-home"
+
+                # Administrative contact pubkey (32-byte hex, not npub)
+                pubkey = "0c2d168a4ae8ca58c9f1ab237b5df682599c6c7ab74307ea8b05684b60405d41"
+
+                # Administrative contact URI
+                contact = "mailto:crepusculop2p@proton.me"
+
+                # Favicon location.  Relative to the current directory.  Assumes an
+                # ICO format.
+                #favicon = "favicon.ico"
+
+                # URL of Relay's icon.
+                #relay_icon = "https://example.test/img.png"
+
+                # Path to custom relay html page
+                #relay_page = "index.html"
+
+                [diagnostics]
+                # Enable tokio tracing (for use with tokio-console)
+                #tracing = false
+
+                [database]
+                # Database engine (sqlite/postgres).  Defaults to sqlite.
+                # Support for postgres is currently experimental.
+                #engine = "sqlite"
+
+                # Directory for SQLite files.  Defaults to the current directory.  Can
+                # also be specified (and overriden) with the "--db dirname" command
+                # line option.
+                data_directory = "/etc/nostr-rs-relay"
+
+                # Use an in-memory database instead of 'nostr.db'.
+                # Requires sqlite engine.
+                # Caution; this will not survive a process restart!
+                #in_memory = false
+
+                # Database connection pool settings for subscribers:
+
+                # Minimum number of SQLite reader connections
+                #min_conn = 0
+
+                # Maximum number of SQLite reader connections.  Recommend setting this
+                # to approx the number of cores.
+                #max_conn = 8
+
+                # Database connection string.  Required for postgres; not used for
+                # sqlite.
+                #connection = "postgresql://postgres:nostr@localhost:7500/nostr"
+
+                # Optional database connection string for writing.  Use this for
+                # postgres clusters where you want to separate reads and writes to
+                # different nodes.  Ignore for single-database instances.
+                #connection_write = "postgresql://postgres:nostr@localhost:7500/nostr"
+
+                [logging]
+                # Directory to store log files.  Log files roll over daily.
+                #folder_path = "./log"
+                #file_prefix = "nostr-relay"
+
+                [grpc]
+                # gRPC interfaces for externalized decisions and other extensions to
+                # functionality.
+                #
+                # Events can be authorized through an external service, by providing
+                # the URL below.  In the event the server is not accessible, events
+                # will be permitted.  The protobuf3 schema used is available in
+                # `proto/nauthz.proto`.
+                # event_admission_server = "http://[::1]:50051"
+
+                # If the event admission server denies writes
+                # in any case (excluding spam filtering).
+                # This is reflected in the relay information document.
+                # restricts_write = true
+
+                [network]
+                # Bind to this network address
+                address = "0.0.0.0"
+
+                # Listen on this port
+                port = 8080
+
+                # If present, read this HTTP header for logging client IP addresses.
+                # Examples for common proxies, cloudflare:
+                #remote_ip_header = "x-forwarded-for"
+                #remote_ip_header = "cf-connecting-ip"
+
+                # Websocket ping interval in seconds, defaults to 5 minutes
+                #ping_interval = 300
+
+                [options]
+                # Reject events that have timestamps greater than this many seconds in
+                # the future.  Recommended to reject anything greater than 30 minutes
+                # from the current time, but the default is to allow any date.
+                reject_future_seconds = 1800
+
+                [limits]
+                # Limit events created per second, averaged over one minute.  Must be
+                # an integer.  If not set (or set to 0), there is no limit.  Note:
+                # this is for the server as a whole, not per-connection.
+                #
+                # Limiting event creation is highly recommended if your relay is
+                # public!
+                #
+                #messages_per_sec = 5
+
+                # Limit client subscriptions created, averaged over one minute.  Must
+                # be an integer.  If not set (or set to 0), defaults to unlimited.
+                # Strongly recommended to set this to a low value such as 10 to ensure
+                # fair service.
+                #subscriptions_per_min = 0
+
+                # UNIMPLEMENTED...
+                # Limit how many concurrent database connections a client can have.
+                # This prevents a single client from starting too many expensive
+                # database queries.  Must be an integer.  If not set (or set to 0),
+                # defaults to unlimited (subject to subscription limits).
+                #db_conns_per_client = 0
+
+                # Limit blocking threads used for database connections.  Defaults to 16.
+                #max_blocking_threads = 16
+
+                # Limit the maximum size of an EVENT message.  Defaults to 128 KB.
+                # Set to 0 for unlimited.
+                #max_event_bytes = 131072
+
+                # Maximum WebSocket message in bytes.  Defaults to 128 KB.
+                #max_ws_message_bytes = 131072
+
+                # Maximum WebSocket frame size in bytes.  Defaults to 128 KB.
+                #max_ws_frame_bytes = 131072
+
+                # Broadcast buffer size, in number of events.  This prevents slow
+                # readers from consuming memory.
+                #broadcast_buffer = 16384
+
+                # Event persistence buffer size, in number of events.  This provides
+                # backpressure to senders if writes are slow.
+                #event_persist_buffer = 4096
+
+                # Event kind blacklist. Events with these kinds will be discarded.
+                #event_kind_blacklist = [
+                #    70202,
+                #]
+
+                # Event kind allowlist. Events other than these kinds will be discarded.
+                #event_kind_allowlist = [
+                #    0, 1, 2, 3, 7, 40, 41, 42, 43, 44, 30023,
+                #]
+
+                # Rejects imprecise requests (kind only and author only etc)
+                # This is a temperary measure to improve the adoption of outbox model
+                # Its recommended to have this enabled
+                limit_scrapers = false
+
+                [authorization]
+                # Pubkey addresses in this array are whitelisted for event publishing.
+                # Only valid events by these authors will be accepted, if the variable
+                # is set.
+                #pubkey_whitelist = [
+                #  "35d26e4690cbe1a898af61cc3515661eb5fa763b57bd0b42e45099c8b32fd50f",
+                #  "887645fef0ce0c3c1218d2f5d8e6132a19304cdc57cd20281d082f38cfea0072",
+                #]
+                # Enable NIP-42 authentication
+                #nip42_auth = false
+                # Send DMs (kind 4 and 44) and gift wraps (kind 1059) only to their authenticated recipients
+                #nip42_dms = false
+
+                [verified_users]
+                # NIP-05 verification of users.  Can be "enabled" to require NIP-05
+                # metadata for event authors, "passive" to perform validation but
+                # never block publishing, or "disabled" to do nothing.
+                #mode = "disabled"
+
+                # Domain names that will be prevented from publishing events.
+                #domain_blacklist = ["wellorder.net"]
+
+                # Domain names that are allowed to publish events.  If defined, only
+                # events NIP-05 verified authors at these domains are persisted.
+                #domain_whitelist = ["example.com"]
+
+                # Consider an pubkey "verified" if we have a successful validation
+                # from the NIP-05 domain within this amount of time.  Note, if the
+                # domain provides a successful response that omits the account,
+                # verification is immediately revoked.
+                #verify_expiration = "1 week"
+
+                # How long to wait between verification attempts for a specific author.
+                #verify_update_frequency = "24 hours"
+
+                # How many consecutive failed checks before we give up on verifying
+                # this author.
+                #max_consecutive_failures = 20
+
+                [pay_to_relay]
+                # Enable pay to relay
+                #enabled = false
+
+                # Node interface to use
+                #processor = "ClnRest/LNBits"
+
+                # The cost to be admitted to relay
+                #admission_cost = 4200
+
+                # The cost in sats per post
+                #cost_per_event = 0
+
+                # Url of node api
+                #node_url = "<node url>"
+
+                # LNBits api secret
+                #api_secret = "<ln bits api>"
+
+                # Path to CLN rune
+                #rune_path = "<rune path>"
+
+                # Nostr direct message on signup
+                #direct_message=false
+
+                # Terms of service
+                #terms_message = """
+                #This service (and supporting services) are provided "as is", without warranty of any kind, express or implied.
+                #
+                #By using this service, you agree:
+                #* Not to engage in spam or abuse the relay service
+                #* Not to disseminate illegal content
+                #* That requests to delete content cannot be guaranteed
+                #* To use the service in compliance with all applicable laws
+                #* To grant necessary rights to your content for unlimited time
+                #* To be of legal age and have capacity to use this service
+                #* That the service may be terminated at any time without notice
+                #* That the content you publish may be removed at any time without notice
+                #* To have your IP address collected to detect abuse or misuse
+                #* To cooperate with the relay to combat abuse or misuse
+                #* You may be exposed to content that you might find triggering or distasteful
+                #* The relay operator is not liable for content produced by users of the relay
+                #"""
+
+                # Whether or not new sign ups should be allowed
+                #sign_ups = false
+
+                # optional if `direct_message=false`
+                #secret_key = "<nostr nsec>"              '';
+
+              systemd.services.nostr-relay = {
+                wantedBy = [ "multi-user.target" ]; # Garante que o serviço é iniciado no boot
+                description = "Nostr RS Relay Service";
+                serviceConfig.ExecStart = "${pkgs.nostr-rs-relay}/bin/nostr-rs-relay --config /etc/nostr-rs-relay/config.toml";
+                serviceConfig.Restart = "always";
+              };
             };
-            # services.electrum = { emable = true; };
-            # services.mempool = { enable = true; };
           };
         };
       };

@@ -1,9 +1,15 @@
-{ pkgs, ... }: {
+{ pkgs
+, config
+, ...
+}: {
   programs.nixvim = {
     enable = true;
     plugins = {
       # Buffer bar
       bufferline = { enable = true; };
+
+      #neoscrool
+      neoscroll.enable = true;
 
       # Status bar
       lualine = { enable = true; };
@@ -153,9 +159,10 @@
       toggleterm = {
         enable = true;
         settings = {
-          # hide_numbers = false;
-          # autochdir = true;
+          hide_numbers = false;
+          autochdir = true;
           close_on_exit = true;
+          open_mapping = "[[<c-s>]]";
           direction = "float";
         };
       };
@@ -168,11 +175,11 @@
 
       which-key = {
         enable = true;
-        registrations = {
-          "<leader>fg" = "Find Git files with telescope";
-          "<leader>fw" = "Find text with telescope";
-          "<leader>ff" = "Find files with telescope";
-        };
+        # registrations = {
+        #   "<leader>fg" = "Find Git files with telescope";
+        #   "<leader>fw" = "Find text with telescope";
+        #   "<leader>ff" = "Find files with telescope";
+        # };
       };
 
       # Markdown preview server
@@ -308,7 +315,6 @@
       alpha = {
         enable = true;
         theme = "dashboard";
-        iconsEnabled = true;
       };
 
       cmp-emoji = { enable = true; };
@@ -556,41 +562,6 @@
       -- }
            })  '';
 
-    colorschemes.catppuccin = {
-      enable = true;
-      settings = {
-        no_bold = false;
-        no_italic = false;
-        no_underline = false;
-        transparent_background = true;
-        integrations = {
-          cmp = true;
-          noice = true;
-          notify = true;
-          neotree = true;
-          harpoon = true;
-          gitsigns = true;
-          which_key = true;
-          illuminate.enabled = true;
-          treesitter = true;
-          treesitter_context = true;
-          telescope.enabled = true;
-          indent_blankline.enabled = true;
-          mini.enabled = true;
-          native_lsp = {
-            enabled = true;
-            inlay_hints = { background = true; };
-            underlines = {
-              errors = [ "underline" ];
-              hints = [ "underline" ];
-              information = [ "underline" ];
-              warnings = [ "underline" ];
-            };
-          };
-        };
-      };
-    };
-
     # extraPlugins = with pkgs.vimPlugins; [
     #   vim-be-good
     #   headlines-nvim
@@ -599,6 +570,7 @@
 
     extraPlugins = with pkgs.vimPlugins;
       [
+        base16-nvim
         vim-be-good
         headlines-nvim # Should load this in at the opening of filetypes that require this, namely Markdown.
         nvim-web-devicons # Should load this in at Telescope/Neotree actions.
@@ -766,6 +738,7 @@
       }
     ];
     globalOpts = {
+      title = true;
       # Line numbers
       number = true;
       relativenumber = true;
@@ -821,12 +794,102 @@
     #   }
     # ];
 
-    highlight = {
+    highlight = with config.colorScheme.palette; {
+      # Cor padrão do texto normal
+      normal = {
+        bg = "#${base00}"; # Fundo
+        fg = "#${base04}"; # Texto
+      };
+
+      # Comentários
       Comment = {
-        fg = "#ff00ff";
-        bg = "#000000";
-        underline = true;
+        fg = "#${base02}";
+        bg = "none";
+        underline = false; # Sublinhado
+        bold = false; # Negrito
+      };
+
+      # Texto inserido ou destacado
+      Visual = {
+        bg = "#${base01}"; # Fundo quando está em modo visual
+      };
+
+      # Texto em strings
+      String = {
+        fg = "#${base0B}"; # Cor do texto de string
+      };
+
+      # Funções
+      Function = {
+        fg = "#${base0D}"; # Cor das funções
         bold = true;
+      };
+
+      # Variáveis
+      Identifier = {
+        fg = "#${base08}";
+      };
+
+      # Constantes
+      Constant = {
+        fg = "#${base09}";
+      };
+
+      # Erros
+      Error = {
+        fg = "#${base08}";
+        bg = "#${base00}";
+        bold = true;
+        underline = true;
+      };
+
+      # Operadores
+      Operator = {
+        fg = "#${base05}";
+      };
+
+      # Palavras reservadas
+      Keyword = {
+        fg = "#${base0E}";
+        bold = true;
+      };
+
+      # Diretivas de pré-processador
+      PreProc = {
+        fg = "#${base0A}";
+      };
+
+      # Tipo de dados
+      Type = {
+        fg = "#${base0C}";
+        bold = true;
+      };
+
+      # Variável booleana
+      Boolean = {
+        fg = "#${base09}";
+      };
+
+      # Números
+      Number = {
+        fg = "#${base09}";
+      };
+
+      # Texto que foi sublinhado
+      Underlined = {
+        underline = true;
+      };
+
+      # Fundo da barra de status
+      StatusLine = {
+        fg = "#${base04}";
+        bg = "#${base02}";
+      };
+
+      # Separadores verticais entre janelas
+      VertSplit = {
+        fg = "#${base02}";
+        bg = "#${base00}";
       };
     };
   };

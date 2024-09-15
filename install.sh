@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+#FIXIT: Fix install script.
 USERNAME=$(whoami)
 HOME_MANAGER_DIR="$HOME/.config/home-manager/"
 HOME_MANAGER_FILE="$HOME_MANAGER_DIR/home.nix"

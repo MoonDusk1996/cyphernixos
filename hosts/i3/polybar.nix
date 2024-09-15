@@ -1,8 +1,9 @@
-{ pkgs, config, ... }:
-
+{ pkgs
+, config
+, ...
+}:
 # Created By @icanwalkonwater
 # Edited and ported to Nix by Th0rgal
-
 let
   # Trasparent
   bg = "#00000000";
@@ -27,7 +28,7 @@ in
       #====================BARS====================#
 
       "bar/top" = {
-        bottom = false;
+        bottom = true;
         fixed-center = true;
 
         width = "100%";
@@ -329,4 +330,3 @@ in
     };
   };
 }
-

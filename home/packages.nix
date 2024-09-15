@@ -1,51 +1,61 @@
 { pkgs, ... }:
-let
-  nerdFonts = pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; };
+with pkgs; let
+  python-packages = python3.withPackages (python-packages:
+    with python-packages; [
+      pip
+      pyserial
+      cbor2
+    ]);
 in
 {
-  imports = [ ./modules/programs/main.nix ];
+  imports = [
+    ./modules/programs
+  ];
 
   home.packages = with pkgs; [
     # DEV
-    nixfmt-classic
     gcc
     binutils
     rustup
     nodejs
+    python-packages
+    go
 
-    # DEFAULT
-    # neovim
-    neofetch
-    vlc
-    dolphin
+    # Tui
     btop
+    neofetch
     zsh-powerlevel10k
+
+    # Gui
+    vlc
+    pasystray
+    rofi
+    feh
+    flameshot
+    dolphin
     tor-browser-bundle-bin
+    obs-studio
     pavucontrol
+    emote
+    neovide
+    qbittorrent-nox
+    electrum
 
     # UTILS
     xsel
-    obs-studio
-    #kdeconnect
-
-    # Fonts
-    nerdFonts
   ];
 
-  fonts.fontconfig = { enable = true; };
+  #KDE Connect
   services.kdeconnect = {
     enable = true;
     indicator = true;
   };
-  # Let Home Manager install and manage itself.
-  programs.home-manager.enable = true;
 
   # Instalar toolchain padrão
   home.activation = {
     installRustToolchain = ''
       ${pkgs.rustup}/bin/rustup default stable
       ${pkgs.rustup}/bin/rustup component add clippy
-      ${pkgs.rustup}/bin/rustup component add rustfmt
     '';
   };
 }

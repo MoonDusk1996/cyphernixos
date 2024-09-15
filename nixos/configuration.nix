@@ -1,10 +1,8 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ pkgs, ... }:
-
-{
+#TODO: refact this configuration.nix this file
+{ pkgs, ... }: {
   imports = [
     ./modules/nvidia.nix
     ./modules/virtualisation.nix
@@ -54,6 +52,10 @@
     packages = [ ];
   };
   services.getty.autologinUser = "dusk"; # Enable automatic login for the user.
+  services.udev.extraRules = ''
+    KERNEL=="ttyUSB*", SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", MODE="0660", GROUP="plugdev", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="jade%n"
+    KERNEL=="ttyACM*", SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="55d4", MODE="0660", GROUP="plugdev", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="jade%n"
+  '';
 
   # X server, i3 and slick-greeter
   services.xserver = {
@@ -70,24 +72,22 @@
 
   networking.firewall = {
     enable = true;
-    allowedTCPPortRanges = [{
-      from = 1714;
-      to = 1764;
-    } # KDE Connect
-      ];
-    allowedUDPPortRanges = [{
-      from = 1714;
-      to = 1764;
-    } # KDE Connect
-      ];
+    allowedTCPPortRanges = [
+      {
+        from = 1714;
+        to = 1764;
+      } # KDE Connect
+    ];
+    allowedUDPPortRanges = [
+      {
+        from = 1714;
+        to = 1764;
+      } # KDE Connect
+    ];
   };
   # Zshell
   programs.zsh.enable = true;
   users.defaultUserShell = pkgs.zsh;
-
-  # Audio
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
 
   # Version
   system.stateVersion = "24.05"; # Did you read the comment?

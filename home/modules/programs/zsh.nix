@@ -1,16 +1,29 @@
-{ config, pkgs, ... }: {
+{ config
+, pkgs
+, ...
+}: {
   programs.zsh = {
     enable = true;
     initExtra = "source ~/.p10k.zsh";
 
     shellAliases = {
+      # Misc
       ll = "ls -l";
       la = "ls -al";
+
+      # NixOS
       update = "sudo nixos-rebuild switch";
       hm = "home-manager switch";
-      update-all =
-        "sudo nixos-rebuild switch && home-manager switch && sudo reboot";
-    };
+      update-all = "sudo nixos-rebuild switch && home-manager switch && sudo reboot";
+
+      # Bitcoin Hub
+      start-bitcoin-hub = "extra-container start bitcoinhub";
+      stop-bitcoin-hub = "extra-container stop bitcoinhub";
+      bitcoin-getinfo = "extra-container run bitcoinhub -- bitcoin-cli -getinfo";
+      bitcoind-logs = "extra-container run bitcoinhub -- journalctl -u bitcoind -f";
+      electrs-logs = "extra-container run bitcoinhub -- journalctl -u electrs -f";
+
+      };
 
     history = {
       size = 1000;

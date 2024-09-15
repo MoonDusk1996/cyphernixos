@@ -1,6 +1,14 @@
-{ lib, pkgs, config, ... }: {
-  home.packages = with pkgs; [ flameshot feh pasystray rofi ];
-  imports = [ ./cursor.nix ./picom.nix ./polybar.nix ];
+{ lib
+, pkgs
+, config
+, ...
+}: {
+  imports = [
+    ./cursor.nix
+    ./picom.nix
+    ./polybar.nix
+    ./fonts.nix
+  ];
 
   xsession.windowManager.i3 = with config.colorScheme.palette; {
     enable = true;
@@ -26,14 +34,11 @@
         outer = 0;
         smartGaps = true;
       };
-
       keybindings = lib.mkOptionDefault {
-        "XF86AudioMute" =
-          "exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status";
-        "XF86AudioLowerVolume" =
-          "exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status";
-        "XF86AudioRaiseVolume" =
-          "exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status";
+        #FIXIT: keyboard keys audio buttons
+        # "XF86AudioMute" = "exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status";
+        # "XF86AudioLowerVolume" = "exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status";
+        # "XF86AudioRaiseVolume" = "exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status";
         "${modifier}+Return" = "exec ${pkgs.alacritty}/bin/alacritty";
         "${modifier}+q" = "kill";
         "${modifier}+Shift+r" = "restart";
@@ -64,7 +69,6 @@
           always = true;
           notification = false;
         }
-
       ];
     };
   };

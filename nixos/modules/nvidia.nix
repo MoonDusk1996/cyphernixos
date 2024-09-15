@@ -1,3 +1,4 @@
+#BUG: nvidia freezing when suspend?
 { config, ... }: {
 
   # Enable OpenGL
