@@ -10,20 +10,19 @@
       # Misc
       ll = "ls -l";
       la = "ls -al";
+      n = "nvim";
+      r = "ranger";
+      logs-bitcoind = "journalctl -u bitcoind -f";
+      logs-electrs = "journalctl -u electrs -f";
+      nostrudel = "cd ~/repo/nostr-clients/nostrudel/ && pnpm start --host";
+      primal = "cd ~/repo/nostr-clients/primal-web-app/ && npm run host";
 
       # NixOS
       update = "sudo nixos-rebuild switch";
-      hm = "home-manager switch";
-      update-all = "sudo nixos-rebuild switch && home-manager switch && sudo reboot";
-
-      # Bitcoin Hub
-      start-bitcoin-hub = "extra-container start bitcoinhub";
-      stop-bitcoin-hub = "extra-container stop bitcoinhub";
-      bitcoin-getinfo = "extra-container run bitcoinhub -- bitcoin-cli -getinfo";
-      bitcoind-logs = "extra-container run bitcoinhub -- journalctl -u bitcoind -f";
-      electrs-logs = "extra-container run bitcoinhub -- journalctl -u electrs -f";
-
-      };
+      hm = "home-manager --flake /etc/nixos/ switch";
+      clean = "sudo nix-collect-garbage -d && nix-collect-garbage -d && nix-store --delete";
+      config = " cd /etc/nixos/ && nvim";
+    };
 
     history = {
       size = 1000;
@@ -32,21 +31,21 @@
 
     plugins = [
       {
-        name = "zsh-autosuggestions";
-        src = pkgs.fetchFromGitHub {
-          owner = "zsh-users";
-          repo = "zsh-autosuggestions";
-          rev = "v0.6.4";
-          sha256 = "0h52p2waggzfshvy1wvhj4hf06fmzd44bv6j18k3l9rcx6aixzn6";
-        };
-      }
-      {
         name = "fast-syntax-highlighting";
         src = pkgs.fetchFromGitHub {
           owner = "zdharma";
           repo = "fast-syntax-highlighting";
           rev = "v1.55";
           sha256 = "0h7f27gz586xxw7cc0wyiv3bx0x3qih2wwh05ad85bh2h834ar8d";
+        };
+      }
+      {
+        name = "zsh-autosuggestions";
+        src = pkgs.fetchFromGitHub {
+          owner = "zsh-users";
+          repo = "zsh-autosuggestions";
+          rev = "v0.6.4";
+          sha256 = "0h52p2waggzfshvy1wvhj4hf06fmzd44bv6j18k3l9rcx6aixzn6";
         };
       }
       {

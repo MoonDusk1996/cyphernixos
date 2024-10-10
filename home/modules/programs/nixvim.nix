@@ -1,7 +1,11 @@
 { pkgs
 , config
+, nixvim
 , ...
 }: {
+  imports = [
+    nixvim.homeManagerModules.nixvim
+  ];
   programs.nixvim = {
     enable = true;
     plugins = {
@@ -73,9 +77,9 @@
       lazygit = { enable = true; };
 
       # Notify
-      notify = {
+      notify = with config.colorScheme.palette; {
         enable = true;
-        backgroundColour = "#1e1e2e";
+        backgroundColour = "#${base00}";
         fps = 60;
         render = "default";
         timeout = 500;
@@ -175,18 +179,13 @@
 
       which-key = {
         enable = true;
-        # registrations = {
-        #   "<leader>fg" = "Find Git files with telescope";
-        #   "<leader>fw" = "Find text with telescope";
-        #   "<leader>ff" = "Find files with telescope";
-        # };
       };
 
       # Markdown preview server
-      markdown-preview = {
-        enable = true;
-        settings.theme = "dark";
-      };
+      # markdown-preview = {
+      #   enable = true;
+      #   settings.theme = "dark";
+      # };
 
       # Prettier fancier command window
       noice = { enable = true; };
@@ -279,7 +278,7 @@
         enable = true;
         servers = {
           # Average webdev LSPs
-          tsserver.enable = true; # TS/JS
+          # tsserver.enable = true; # TS/JS
           cssls.enable = true; # CSS
           tailwindcss.enable = true; # TailwindCSS
           html.enable = true; # HTML
@@ -295,7 +294,6 @@
           clangd.enable = true; # C/C++
           csharp-ls.enable = true; # C#
           yamlls.enable = true; # YAML
-
           lua-ls = {
             # Lua
             enable = true;

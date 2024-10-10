@@ -403,10 +403,6 @@
     },
     "root": {
       "inputs": {
-        "extra-container": [
-          "nix-bitcoin",
-          "extra-container"
-        ],
         "home-manager": "home-manager",
         "nix-bitcoin": "nix-bitcoin",
         "nix-colors": "nix-colors",

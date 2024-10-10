@@ -1,22 +1,16 @@
-{ lib
+{ config
+, lib
 , pkgs
-, config
 , ...
 }: {
-  imports = [
-    ./cursor.nix
-    ./picom.nix
-    ./polybar.nix
-    ./fonts.nix
-  ];
-
   xsession.windowManager.i3 = with config.colorScheme.palette; {
     enable = true;
     package = pkgs.i3-gaps;
     extraConfig = ''
       workspace 1 output HDMI-0
-      for_window [class="feh"] floating enable, move position center
-      for_window [class="vlc"] floating enable, move position center
+      for_window [class="feh"] floating enable, move position center, resize set 1280 960
+      for_window [class="vlc"] floating disable, fullscreen enable
+      for_window [window_role="pop-up"] floating enable, move position center
     '';
     config = rec {
       colors.focused.background = "#${base00}";
@@ -35,10 +29,9 @@
         smartGaps = true;
       };
       keybindings = lib.mkOptionDefault {
-        #FIXIT: keyboard keys audio buttons
-        # "XF86AudioMute" = "exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status";
-        # "XF86AudioLowerVolume" = "exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status";
-        # "XF86AudioRaiseVolume" = "exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status";
+        "XF86AudioRaiseVolume" = "exec --no-startup-id wpctl set-volume @DEFAULT_SINK@ 4%+ && $refresh_i3status";
+        "XF86AudioLowerVolume" = "exec --no-startup-id wpctl set-volume @DEFAULT_SINK@ 4%- && $refresh_i3status";
+        "XF86AudioMute" = "exec --no-startup-id wpctl set-mute @DEFAULT_SINK@ toggle && $refresh_i3status";
         "${modifier}+Return" = "exec ${pkgs.alacritty}/bin/alacritty";
         "${modifier}+q" = "kill";
         "${modifier}+Shift+r" = "restart";

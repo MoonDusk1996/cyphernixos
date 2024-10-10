@@ -1,6 +1,7 @@
-{ pkgs, config, ... }:
-
-{
+{ pkgs
+, config
+, ...
+}: {
   programs.alacritty = {
     enable = true;
 
@@ -25,7 +26,7 @@
 
       colors = with config.colorScheme.palette; {
         bright = {
-          black = "0x${base00}";
+          black = "0x${base02}";
           blue = "0x${base0D}";
           cyan = "0x${base0C}";
           green = "0x${base0B}";
@@ -39,7 +40,7 @@
           text = "0x${base04}";
         };
         normal = {
-          black = "0x${base00}";
+          black = "0x${base02}";
           blue = "0x${base0D}";
           cyan = "0x${base0C}";
           green = "0x${base0B}";

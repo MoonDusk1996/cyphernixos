@@ -1,16 +1,12 @@
-{ inputs, ... }: {
+{
   imports = [
-    inputs.nix-colors.homeManagerModules.default
-    inputs.nixvim.homeManagerModules.nixvim
-    ../hosts/i3
-    ./packages.nix
+    ../hosts/home_server
+    ./modules/colorscheme.nix
+    ./modules/programs
   ];
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
-
-  # Colorscheme
-  colorScheme = inputs.nix-colors.colorSchemes.gruvbox-material-dark-soft;
 
   # Home settings
   home = {

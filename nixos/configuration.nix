@@ -1,25 +1,57 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-#TODO: refact this configuration.nix this file
 { pkgs, ... }: {
   imports = [
-    ./modules/nvidia.nix
-    ./modules/virtualisation.nix
     ./hardware-configuration.nix
+    ./services.nix
+    ./packages
   ];
-
+  boot.kernelPackages = pkgs.linuxPackages_zen;
   nixpkgs.config.allowUnfree = true;
-  nix.settings.experimental-features = [ "nix-command" "flakes" ]; # Flakes
+  virtualisation.docker.enable = true;
+
+  # Enable Flakes
+  nix = {
+    package = pkgs.nixFlakes;
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
+
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 1w";
+    };
+
+    settings.auto-optimise-store = true;
+  };
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader = {
+    systemd-boot.enable = true;
+    efi.canTouchEfiVariables = true;
+    systemd-boot.configurationLimit = 7;
+  };
 
   # Networking
-  networking.hostName = "lumia"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  networking.networkmanager.enable = true;
+  networking = {
+    # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+    hostName = "lumia"; # Define your hostname.
+    networkmanager.enable = true;
+    firewall = {
+      enable = true;
+      allowedTCPPortRanges = [
+        {
+          from = 1714;
+          to = 1764;
+        } # KDE Connect
+      ];
+      allowedUDPPortRanges = [
+        {
+          from = 1714;
+          to = 1764;
+        } # KDE Connect
+      ];
+    };
+  };
 
   # Time zone.
   time.timeZone = "America/Manaus";
@@ -36,58 +68,18 @@
     LC_TIME = "pt_BR.UTF-8";
   };
 
-  # Keymap in X11
-  services.xserver.xkb = {
-    layout = "br";
-    variant = "";
-  };
-
   console.keyMap = "br-abnt2";
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.dusk = {
-    isNormalUser = true;
-    description = "dusk";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = [ ];
-  };
-  services.getty.autologinUser = "dusk"; # Enable automatic login for the user.
-  services.udev.extraRules = ''
-    KERNEL=="ttyUSB*", SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", MODE="0660", GROUP="plugdev", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="jade%n"
-    KERNEL=="ttyACM*", SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="55d4", MODE="0660", GROUP="plugdev", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="jade%n"
-  '';
-
-  # X server, i3 and slick-greeter
-  services.xserver = {
-    enable = true;
-    windowManager.i3.enable = true;
-    displayManager.lightdm = {
-      background = "/etc/lightdm/.background";
-      # greeters.slick = {
-      #   enable = true;
-      # };
+  users = {
+    defaultUserShell = pkgs.zsh;
+    users = {
+      dusk = {
+        isNormalUser = true;
+        extraGroups = [ "networkmanager" "wheel" "audio" "docker" ];
+      };
     };
   };
-  services.displayManager.defaultSession = "none+i3";
-
-  networking.firewall = {
-    enable = true;
-    allowedTCPPortRanges = [
-      {
-        from = 1714;
-        to = 1764;
-      } # KDE Connect
-    ];
-    allowedUDPPortRanges = [
-      {
-        from = 1714;
-        to = 1764;
-      } # KDE Connect
-    ];
-  };
-  # Zshell
-  programs.zsh.enable = true;
-  users.defaultUserShell = pkgs.zsh;
 
   # Version
   system.stateVersion = "24.05"; # Did you read the comment?
