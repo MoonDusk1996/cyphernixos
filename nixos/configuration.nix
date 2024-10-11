@@ -3,6 +3,7 @@
     ./hardware-configuration.nix
     ./services.nix
     ./packages
+    ./disks.nix
   ];
   boot.kernelPackages = pkgs.linuxPackages_zen;
   nixpkgs.config.allowUnfree = true;
