@@ -43,7 +43,7 @@
       enable = true;
       enableGeoIP = false;
       relay.onionServices = {
-        nostr-relay = {
+        nostr-rs-relay = {
           version = 3;
           map = [
             {
