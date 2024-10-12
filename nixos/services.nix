@@ -1,33 +1,14 @@
 {
-  systemd.sleep.extraConfig = ''
-    AllowSuspend=no
-    AllowHibernation=no
-    AllowHybridSleep=no
-    AllowSuspendThenHibernate=no
-  '';
-
-  services.calibre-web = {
-    enable = true;
-    listen = {
-      port = 8110;
-    };
-    options = {
-      enableBookUploading = true;
-      calibreLibrary = "/mnt/ciberia/calibre-web";
-    };
-  };
   services = {
     bitcoind = {
       enable = true;
       dataDir = "/mnt/ciberia/cypher_hub/bitcoind";
       txindex = false;
     };
-
     electrs = {
       enable = true;
       dataDir = "/mnt/ciberia/cypher_hub/electrs";
     };
-
     transmission = {
       enable = true; #Enable transmission daemon
       openRPCPort = true; #Open firewall for RPC
@@ -37,8 +18,6 @@
         download-dir = "/mnt/ciberia/cypher_hub/torrents/downloads";
       };
     };
-
-    ## Tor onion
     tor = {
       enable = true;
       enableGeoIP = false;
@@ -69,10 +48,9 @@
         };
       };
     };
-
     snowflake-proxy = {
       enable = true;
-      capacity = 7;
+      capacity = 3;
     };
 
     # X11 + i3WM
