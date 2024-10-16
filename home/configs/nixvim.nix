@@ -801,7 +801,7 @@
 
       # Comentários
       Comment = {
-        fg = "#${base02}";
+        fg = "#${base03}";
         bg = "none";
         underline = false; # Sublinhado
         bold = false; # Negrito

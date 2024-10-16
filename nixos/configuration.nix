@@ -1,14 +1,9 @@
 { pkgs, ... }: {
   imports = [
     ./hardware-configuration.nix
-    ./packages
-    ./services.nix
-    ./disks.nix
     ./zone.nix
-    ./networking.nix
   ];
 
-  #Kernel
   boot.kernelPackages = pkgs.linuxPackages_zen;
 
   nix = {
@@ -43,7 +38,6 @@
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users = {
-    defaultUserShell = pkgs.zsh;
     users = {
       dusk = {
         isNormalUser = true;
@@ -51,6 +45,17 @@
       };
     };
   };
+
+  # zsh
+  environment.shells = with pkgs; [ zsh ];
+  programs.zsh.enable = true;
+  users.defaultUserShell = pkgs.zsh;
+
+  # Udev jade rules
+  services.udev.extraRules = ''
+    KERNEL=="ttyUSB*", SUBSYSTEMS=="usb", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", MODE="0660", GROUP="plugdev", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="jade%n"
+    KERNEL=="ttyACM*", SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="55d4", MODE="0660", GROUP="plugdev", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="jade%n"
+  '';
 
   # Version
   system.stateVersion = "24.05"; # Did you read the comment?

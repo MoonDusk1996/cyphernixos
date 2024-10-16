@@ -1,39 +1,27 @@
-{ pkgs, ... }:
-with pkgs; let
-  python-packages = python3.withPackages (python-packages:
-    with python-packages; [
-      pip
-      pyserial
-      cbor2
-    ]);
-in
-{
+{ pkgs, ... }: {
   imports = [
-    ./git.nix
-    ./zsh.nix
-    ./firefox.nix
-    # ./chromium.nix
+    ./theme
     ./alacritty.nix
-    ./ranger.nix
+    # ./chromium.nix
+    ./cursor.nix
+    ./firefox.nix
+    ./git.nix
+    ./hyprland.nix
+    ./i3wm.nix
+    ./kde-connect.nix
     ./nixvim.nix
+    ./picom.nix
+    ./polybar.nix
+    ./ranger.nix
+    ./redshift.nix
+    ./zsh.nix
   ];
   home.packages = with pkgs; [
-    # DEV
-    gcc
-    binutils
     rustup
-    node2nix
-    nodejs
-    yarn
-    pnpm
-    # python-packages
-    # go
-
     # Tui
     btop
     neofetch
     zsh-powerlevel10k
-    whois
     ncdu
 
     # Gui
@@ -42,7 +30,8 @@ in
     rofi
     feh
     flameshot
-    dolphin
+    # dolphin
+    # kdePackages.qtsvg
     tor-browser-bundle-bin
     obs-studio
     pavucontrol
@@ -51,12 +40,9 @@ in
     monero-gui
     filelight
     ark
-
-    # UTILS
-    xsel
-    xclip
-    time
-    kdeconnect
+    # nautilus
+    # konsole
+    pcmanfm
   ];
 
   # Instalar toolchain padrão
@@ -66,4 +52,5 @@ in
       ${pkgs.rustup}/bin/rustup component add clippy
     '';
   };
+
 }

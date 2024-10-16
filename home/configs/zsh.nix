@@ -14,8 +14,9 @@
       r = "ranger";
       logs-bitcoind = "journalctl -u bitcoind -f";
       logs-electrs = "journalctl -u electrs -f";
-      nostrudel = "cd ~/repo/nostr-clients/nostrudel/ && pnpm start --host";
-      primal = "cd ~/repo/nostr-clients/primal-web-app/ && npm run host";
+      ns = "nix-shell";
+      nostrudel = "cd ~/repo/nostr-clients/nostrudel/ && nix-shell";
+      primal = "cd ~/repo/nostr-clients/primal-web-app/ && nix-shell";
 
       # NixOS
       update = "sudo nixos-rebuild switch";

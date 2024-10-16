@@ -8,10 +8,21 @@
     package = pkgs.i3-gaps;
     extraConfig = ''
       workspace 1 output HDMI-0
-      for_window [class="feh"] floating enable, move position center, resize set 1280 960
+      workspace 10 output HDMI-1
+
+      for_window [class="feh"] floating disable,
       for_window [class="vlc"] floating disable, fullscreen enable
-      for_window [window_role="pop-up"] floating enable, move position center
+
+      for_window [class="Alacritty"] move to workspace 1, workspace 1
+
+      for_window [class="electrum"] move to workspace 3, workspace 3
+
+      for_window [class="firefox"] move to workspace 2, workspace 2
+      for_window [class="firefox" title="Netflix"] move to workspace 10, floating disable, fullscreen enable
+      for_window [class="firefox" title="Prime Video"] move to workspace 10, floating disable, fullscreen enable
     '';
+    # for_window [window_role="pop-up"] floating enable, move position center
+    # for_window [window_role="About"] floating enable, move position center
     config = rec {
       colors.focused.background = "#${base00}";
       colors.focused.border = "#${base02}";
@@ -36,7 +47,7 @@
         "${modifier}+q" = "kill";
         "${modifier}+Shift+r" = "restart";
         "${modifier}+d" = "exec ${pkgs.rofi}/bin/rofi -show-icons -show drun";
-        "${modifier}+b" = "exec ${pkgs.chromium}/bin/chromium";
+        "${modifier}+b" = "exec ${pkgs.firefox}/bin/firefox";
         "Print" = "exec ${pkgs.flameshot}/bin/flameshot gui";
         "${modifier}+Shift+x" = "exec systemctl suspend";
       };
@@ -52,6 +63,12 @@
           always = true;
           notification = false;
         }
+         {
+          command = "exec kdeconnect-indicator";
+          always = true;
+          notification = false;
+        }
+
         {
           command = "${pkgs.feh}/bin/feh --bg-fill ~/.background";
           always = true;

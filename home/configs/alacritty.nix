@@ -4,11 +4,8 @@
 }: {
   programs.alacritty = {
     enable = true;
-
     settings = {
       window = {
-        title = "Terminal";
-
         padding = {
           y = 5;
           x = 5;

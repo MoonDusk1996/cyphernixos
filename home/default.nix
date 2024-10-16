@@ -1,8 +1,6 @@
 {
   imports = [
-    ../hosts/home_server
-    ./modules/colorscheme.nix
-    ./modules/programs
+    ./configs
   ];
 
   # Let Home Manager install and manage itself.
@@ -15,7 +13,11 @@
     homeDirectory = "/home/dusk";
 
     # Environment
-    sessionVariables = { EDITOR = "nvim"; };
+    sessionVariables = {
+      EDITOR = "nvim";
+      BROWSER = "firefox";
+      TERMINAL = "alacritty";
+    };
 
     # Version
     stateVersion = "24.05"; # Please read the comment before changing.

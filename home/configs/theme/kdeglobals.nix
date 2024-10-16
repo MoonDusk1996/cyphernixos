@@ -3,23 +3,9 @@
     text = ''
       [ColorEffects:Disabled]
       Color=#${base01}
-      ColorAmount=0.30000000000000004
-      ColorEffect=2
-      ContrastAmount=0.1
-      ContrastEffect=0
-      IntensityAmount=-1
-      IntensityEffect=0
 
       [ColorEffects:Inactive]
-      ChangeSelectionColor=true
       Color=#${base01}
-      ColorAmount=0.5
-      ColorEffect=3
-      ContrastAmount=0
-      ContrastEffect=0
-      Enable=true
-      IntensityAmount=0
-      IntensityEffect=0
 
       [Colors:Button]
       BackgroundAlternate=#${base07}
@@ -83,7 +69,7 @@
 
 
       [Colors:Tooltip]
-      BackgroundAlternate=27,25,35
+      BackgroundAlternate=#${base01}
       BackgroundNormal=#${base01}
       DecorationFocus=#${base07}
       DecorationHover=#${base02}
@@ -127,17 +113,6 @@
       ForegroundVisited=#${base0E}
 
 
-      [General]
-      ColorCustomBase16Nix
-      Name=CustomBase16Nix
-      accentActiveTitlebar=false
-      shadeSortColumn=true
-
-
-      [KDE]
-      contrast=4
-
-
       [WM]
       activeBackground=#${base01}
       activeBlend=#${base05}
@@ -145,6 +120,7 @@
       inactiveBackground=#${base03}
       inactiveBlend=#${base04}
       inactiveForeground=#${base04}
+
     '';
   };
 }
