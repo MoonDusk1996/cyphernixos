@@ -15,8 +15,8 @@ sudo mv /etc/nixos /etc/nixos_bkp
 # Criar o novo diretório /etc/nixos 
 sudo mkdir -p /etc/nixos
 
-# Mover o conteúdo do diretório atual para /etc/nixos
-sudo mv ./* /etc/nixos
+# copia o conteúdo do diretório atual para /etc/nixos
+sudo cp -r -v ./* /etc/nixos
 
 # Definir dono do diretorio de configuração nix
 sudo chown "$USER":users -R /etc/nixos
