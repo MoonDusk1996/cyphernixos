@@ -4,7 +4,7 @@
 read -p "Digite o nome do host: " HOSTNAME
 
 # Verificar se a variável não está vazia
-if [ -z "$HOSTNAME" ]; then
+if [ -z "$NEWHOSTNAME" ]; then
     echo "Nome do host não pode estar vazio. Saindo..."
     exit 1
 fi
@@ -19,10 +19,11 @@ sudo mkdir -p /etc/nixos
 # Mover o conteúdo do diretório atual para /etc/nixos
 sudo mv ./* /etc/nixos
 
+sudo chown "$USER":users -R /etc/nixos
 # Gerar o hardware-configuration.nix
 sudo rm -rf /etc/nixos/nixos/hardware-configuration.nix
 sudo nixos-generate-config --dir /etc/nixos/nixos
 
 # Executar home-manager e nixos-rebuild com o nome do host fornecido
 home-manager --flake /etc/nixos switch --experimental-features 'nix-command flakes' &&
-    sudo nixos-rebuild switch --flake /etc/nixos#$HOSTNAME
+    sudo nixos-rebuild switch --flake /etc/nixos#$NEWHOSTNAME
