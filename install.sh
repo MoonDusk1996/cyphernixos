@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Solicitar o nome do host ao usuário
-read -p "Digite o nome do host: " HOSTNAME
+read -p "Digite o nome do host: " NEWHOSTNAME
 
 # Verificar se a variável não está vazia
 if [ -z "$NEWHOSTNAME" ]; then
