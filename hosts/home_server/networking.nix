@@ -30,7 +30,7 @@
     nameservers = [ "127.0.0.1" "8.8.8.8" ];
 
     firewall = rec {
-      enable = true;
+      enable = false;
       allowedTCPPortRanges = [
         {
           from = 1714;
