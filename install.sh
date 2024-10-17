@@ -20,8 +20,9 @@ sudo mkdir -p /etc/nixos
 sudo mv ./* /etc/nixos
 
 # Gerar o hardware-configuration.nix
+sudo rm -rf /etc/nixos/nixos/hardware-configuration.nix
 sudo nixos-generate-config --dir /etc/nixos/nixos
 
 # Executar home-manager e nixos-rebuild com o nome do host fornecido
-home-manager --flake /etc/nixos --experimental-features 'nix-command flakes' &&
+home-manager --flake /etc/nixos switch --experimental-features 'nix-command flakes' &&
     sudo nixos-rebuild switch --flake /etc/nixos#$HOSTNAME
