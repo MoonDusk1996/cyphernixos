@@ -17,7 +17,7 @@
     ./zsh.nix
   ];
   home.packages = with pkgs; [
-    rustup
+    # rustup
     # Tui
     btop
     neofetch
@@ -29,15 +29,15 @@
     pasystray
     rofi
     feh
-    flameshot
+    # flameshot
     # dolphin
     # kdePackages.qtsvg
-    tor-browser-bundle-bin
-    obs-studio
-    pavucontrol
+    # tor-browser-bundle-bin
+    # obs-studio
+    # pavucontrol
     emote
-    electrum
-    monero-gui
+    # electrum
+    # monero-gui
     filelight
     ark
     # nautilus
@@ -45,12 +45,18 @@
     pcmanfm
   ];
 
-  # Instalar toolchain padrão
-  home.activation = {
-    installRustToolchain = ''
-      ${pkgs.rustup}/bin/rustup default stable
-      ${pkgs.rustup}/bin/rustup component add clippy
-    '';
+  dconf.settings = {
+    "org/virt-manager/virt-manager/connections" = {
+      autoconnect = [ "qemu:///system" ];
+      uris = [ "qemu:///system" ];
+    };
   };
 
+  # # Instalar toolchain padrão
+  # home.activation = {
+  #   installRustToolchain = ''
+  #     ${pkgs.rustup}/bin/rustup default stable
+  #     ${pkgs.rustup}/bin/rustup component add clippy
+  #   '';
+  # };
 }
