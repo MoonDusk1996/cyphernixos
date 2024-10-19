@@ -7,7 +7,6 @@
     xsel
     xclip
     udisks2
-    xdg-desktop-portal-kde
     time
   ];
 
@@ -17,11 +16,7 @@
     style = "breeze";
   };
   programs.dconf.enable = true;
-  xdg.portal = {
-    lxqt.enable = true;
-    xdgOpenUsePortal = true;
-  };
-  imports = [
+   imports = [
     ./nix-bitcoin.nix
     ./nvidia.nix
     ./fonts.nix
