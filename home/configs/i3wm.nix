@@ -35,7 +35,7 @@
       window.border = 1;
       window.titlebar = false;
       gaps = {
-        inner = 7;
+        inner = 3;
         outer = 0;
         smartGaps = true;
       };
