@@ -26,22 +26,16 @@
 
     # Gui
     vlc
-    pasystray
+    volctl
     rofi
     feh
-    # flameshot
-    # dolphin
-    # kdePackages.qtsvg
-    # tor-browser-bundle-bin
-    # obs-studio
-    # pavucontrol
+    flameshot
+    obs-studio
+    pavucontrol
     emote
-    # electrum
-    # monero-gui
+    electrum
     filelight
     ark
-    # nautilus
-    # konsole
     pcmanfm
   ];
 

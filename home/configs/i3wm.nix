@@ -59,7 +59,7 @@
           notification = false;
         }
         {
-          command = "exec pasystray";
+          command = "exec volctl";
           always = true;
           notification = false;
         }
