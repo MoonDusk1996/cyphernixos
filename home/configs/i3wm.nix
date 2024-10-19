@@ -59,11 +59,6 @@
           notification = false;
         }
         {
-          command = "exec volctl";
-          always = true;
-          notification = false;
-        }
-         {
           command = "exec kdeconnect-indicator";
           always = true;
           notification = false;
@@ -76,6 +71,11 @@
         }
         {
           command = "systemctl --user restart polybar.service";
+          always = true;
+          notification = false;
+        }
+        {
+          command = "exec volctl";
           always = true;
           notification = false;
         }
