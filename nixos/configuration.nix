@@ -5,6 +5,13 @@
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_zen;
+ 
+  qt = {
+    enable = true;
+    platformTheme = "gnome";
+    style = "breeze";
+  };
+  programs.dconf.enable = true;
 
   nix = {
     # Enable Flakes

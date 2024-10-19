@@ -1,10 +1,59 @@
 {
-  description = "main flake";
+  outputs = { nixpkgs, ... } @ inputs:
+    let
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
+      hm = {
+        home-manager = {
+          useGlobalPkgs = true;
+          useUserPackages = true;
+          sharedModules = [
+            inputs.nixvim.homeManagerModules.nixvim
+          ];
+        };
+      };
+    in
+    {
+      nixosConfigurations = {
+        # Home server
+        wired = nixpkgs.lib.nixosSystem {
+          inherit system;
+          modules = [
+            ./hosts/home_server
+            inputs.nix-bitcoin.nixosModules.default
+            (inputs.nix-bitcoin + "/modules/presets/enable-tor.nix")
+            inputs.home-manager.nixosModules.home-manager
+            hm
+          ];
+        };
+        # Notebook
+        dandelion = nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = {
+            inherit inputs;
+          };
+          modules = [
+            ./hosts/notebook
+            inputs.home-manager.nixosModules.home-manager
+            hm
+          ];
+        };
+      };
+
+      homeConfigurations = {
+        dusk = inputs.home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          extraSpecialArgs = { inherit inputs; };
+          modules = [ ./home ];
+        };
+      };
+    };
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nix-colors.url = "github:misterio77/nix-colors";
     nix-bitcoin.url = "github:fort-nix/nix-bitcoin/release";
+    hyprland.url = "github:hyprwm/Hyprland";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -16,67 +65,4 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-
-  outputs =
-    { home-manager
-    , nix-bitcoin
-    , nix-colors
-    , nixpkgs
-    , nixvim
-    , ...
-    }:
-    let
-      system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
-    in
-    {
-      nixosConfigurations = {
-        # Home server
-        wired = nixpkgs.lib.nixosSystem {
-          inherit system;
-          modules = [
-            ./nixos/configuration.nix
-            ./hosts/home_server
-            nix-bitcoin.nixosModules.default
-            (nix-bitcoin + "/modules/presets/enable-tor.nix")
-            home-manager.nixosModules.home-manager
-            {
-              home-manager = {
-                useGlobalPkgs = true;
-                useUserPackages = true;
-                sharedModules = [
-                  nixvim.homeManagerModules.nixvim
-                ];
-              };
-            }
-          ];
-        };
-        # Notebook
-        dandelion = nixpkgs.lib.nixosSystem {
-          inherit system;
-          modules = [
-            ./nixos/configuration.nix
-            ./hosts/notebook
-            home-manager.nixosModules.home-manager
-            {
-              home-manager = {
-                useGlobalPkgs = true;
-                useUserPackages = true;
-                sharedModules = [
-                  nixvim.homeManagerModules.nixvim
-                ];
-              };
-            }
-          ];
-        };
-      };
-
-      homeConfigurations = {
-        dusk = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          extraSpecialArgs = { inherit nixvim nix-colors; };
-          modules = [ ./home ];
-        };
-      };
-    };
 }
