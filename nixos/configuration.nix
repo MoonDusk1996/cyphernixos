@@ -41,7 +41,7 @@
     users = {
       dusk = {
         isNormalUser = true;
-        extraGroups = [ "networkmanager" "wheel" ];
+        extraGroups = [ "networkmanager" "wheel" "libvirtd" ];
       };
     };
   };

@@ -25,5 +25,8 @@
     ./nix-bitcoin.nix
     ./nvidia.nix
     ./fonts.nix
+    ./disks.nix
+    ./networking.nix
+    ./virtualization.nix
   ];
 }
