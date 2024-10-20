@@ -21,6 +21,8 @@
           vibrancy = 0.1696;
         };
       };
+
+      monitor = "Virtual-1, 1920x1080@60, 0x0, 1";
       gestures = {
         workspace_swipe = true;
         workspace_swipe_touch = true;
