@@ -3,6 +3,7 @@
     enable = true;
     enableGeoIP = false;
     relay.onionServices = {
+
       nostr-rs-relay = {
         version = 3;
         map = [
@@ -15,6 +16,7 @@
           }
         ];
       };
+
       calibre-web = {
         version = 3;
         map = [
@@ -27,6 +29,7 @@
           }
         ];
       };
+
       # nostr-server = {
       #   version = 3;
       #   map = [

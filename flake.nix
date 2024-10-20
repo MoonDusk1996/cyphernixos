@@ -20,7 +20,7 @@
           inherit system;
           specialArgs = { inherit inputs; };
           modules = [
-            ./hosts/common.nix
+            ./hosts
             ./hosts/home_server
             inputs.nix-bitcoin.nixosModules.default
             (inputs.nix-bitcoin + "/modules/presets/enable-tor.nix")
@@ -32,7 +32,7 @@
         dandelion = nixpkgs.lib.nixosSystem {
           inherit system;
           modules = [
-            ./hosts/common.nix
+            ./hosts
             ./hosts/notebook
             inputs.home-manager.nixosModules.home-manager
             hm
