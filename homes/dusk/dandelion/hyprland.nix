@@ -22,10 +22,10 @@
           vibrancy = 0.1696;
         };
       };
-      misc = {
-        vfr = true;
-      };
       # monitor = "Virtual-1, 1280x720@60, 0x0, 1";
+      xwayland = {
+        force_zero_scaling = true;
+      };
       gestures = {
         workspace_swipe = true;
         workspace_swipe_touch = true;
