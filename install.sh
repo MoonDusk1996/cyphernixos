@@ -1,12 +1,20 @@
 #!/usr/bin/env bash
 
-# Definir uma lista de opções para o usuário escolher
-options=("wired (home-server)" "dandelion (notebook)")
+# Definir uma lista de opções para o usuário escolher e um array associativo para mapeá-las
+options=("Home server (wired)" "Notebook (dandelion)")
+declare -A hostnames
+
+# Mapear cada opção para um nome personalizado
+hostnames=(
+    ["home_server"]="wired"
+    ["notebook"]="dandelion"
+)
 
 echo "Escolha o host:"
-select HOST in "${options[@]}"; do
-    # Se uma opção válida for escolhida, 'HOST' terá um valor não vazio
-    if [ -n "$HOST" ]; then
+select choice in "${options[@]}"; do
+    # Se uma opção válida for escolhida, 'choice' terá um valor não vazio
+    if [ -n "$choice" ]; then
+        HOST="${hostnames[$choice]}"
         echo "Você escolheu: $HOST"
         break
     else
@@ -33,4 +41,5 @@ sudo nixos-generate-config --force
 sudo rm -rf /etc/nixos/configuration.nix
 
 # Executar home-manager e nixos-rebuild com o nome do host fornecido
-sudo nixos-rebuild switch --flake /etc/nixos#"$HOST" && home-manager --flake /etc/nixos switch
+sudo nixos-rebuild switch --flake /etc/nixos#"$HOST"  
+home-manager --flake /etc/nixos switch
