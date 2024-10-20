@@ -7,6 +7,7 @@
     options = {
       calibreLibrary = "/mnt/ciberia/cypher_hub/calibre";
       enableBookUploading = true;
+      enableBookConversion = true;
     };
   };
 }
