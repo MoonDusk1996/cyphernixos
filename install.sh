@@ -6,8 +6,8 @@ declare -A hostnames
 
 # Mapear cada opção para um nome personalizado
 hostnames=(
-    ["home_server"]="wired"
-    ["notebook"]="dandelion"
+    ["Home server (wired)"]="wired"
+    ["Notebook (dandelion)"]="dandelion"
 )
 
 echo "Escolha o host:"
@@ -42,4 +42,4 @@ sudo rm -rf /etc/nixos/configuration.nix
 
 # Executar home-manager e nixos-rebuild com o nome do host fornecido
 sudo nixos-rebuild switch --flake /etc/nixos#"$HOST"  
-home-manager --flake /etc/nixos switch
+ho mt-manager --flake /etc/nixos switch
