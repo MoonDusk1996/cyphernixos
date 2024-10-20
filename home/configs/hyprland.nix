@@ -17,6 +17,10 @@
           vibrancy = 0.1696;
         };
       };
+      gestures = {
+        workspace_swipe = true;
+        workspace_swipe_touch = true;
+      };
       bind =
         [
           "$mod, RETURN, exec, $terminal"
