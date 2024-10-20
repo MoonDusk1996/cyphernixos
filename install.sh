@@ -42,4 +42,4 @@ sudo rm -rf /etc/nixos/configuration.nix
 
 # Executar home-manager e nixos-rebuild com o nome do host fornecido
 sudo nixos-rebuild switch --flake /etc/nixos#"$HOST"  
-ho mt-manager --flake /etc/nixos switch
+home-manager --flake /etc/nixos switch
