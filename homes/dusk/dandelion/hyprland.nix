@@ -14,14 +14,17 @@
         rounding = "10";
         shadow_offset = "0 5";
         "col.shadow" = "rgba(00000099)";
+        drop_shadow = false;
         blur = {
-          enabled = true;
+          enabled = false;
           size = 3;
           passes = 1;
           vibrancy = 0.1696;
         };
       };
-
+      misc = {
+        vfr = true;
+      };
       monitor = "Virtual-1, 1920x1080@60, 0x0, 1";
       gestures = {
         workspace_swipe = true;
