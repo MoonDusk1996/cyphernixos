@@ -25,7 +25,7 @@
       misc = {
         vfr = true;
       };
-      monitor = "Virtual-1, 1280x720@60, 0x0, 1";
+      # monitor = "Virtual-1, 1280x720@60, 0x0, 1";
       gestures = {
         workspace_swipe = true;
         workspace_swipe_touch = true;
