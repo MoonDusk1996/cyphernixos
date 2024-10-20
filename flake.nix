@@ -29,9 +29,6 @@
         # Notebook
         dandelion = nixpkgs.lib.nixosSystem {
           inherit system;
-          specialArgs = {
-            inherit inputs;
-          };
           modules = [
             ./hosts/notebook
             inputs.home-manager.nixosModules.home-manager
@@ -53,7 +50,6 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nix-colors.url = "github:misterio77/nix-colors";
     nix-bitcoin.url = "github:fort-nix/nix-bitcoin/release";
-    hyprland.url = "github:hyprwm/Hyprland";
 
     home-manager = {
       url = "github:nix-community/home-manager";

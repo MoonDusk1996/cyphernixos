@@ -22,7 +22,10 @@ sudo cp -r -v ./* /etc/nixos
 sudo chown "$USER":users -R /etc/nixos
 
 # Gerar o hardware-configuration.nix
-sudo nixos-generate-config --dir /etc/nixos/nixos --force
+sudo nixos-generate-config --force
+
+# Remove trash
+sudo rm -rf /etc/nixos/configuration.nix
 
 # Executar home-manager e nixos-rebuild com o nome do host fornecido
 sudo nixos-rebuild switch --flake /etc/nixos#$NEWHOSTNAME && home-manager --flake /etc/nixos switch --experimental-features 'nix-command flakes'
