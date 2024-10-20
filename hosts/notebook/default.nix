@@ -3,7 +3,6 @@
     ../../hardware-configuration.nix
   ];
   networking = {
-    networkmanager.enable = true;
     hostName = "dandelion";
     wireless = {
       enable = true;
