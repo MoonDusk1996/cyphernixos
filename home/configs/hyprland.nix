@@ -19,7 +19,7 @@
       };
       bind =
         [
-          "$mod, RETURN, $terminal"
+          "$mod, RETURN, exec, $terminal"
           "$mod, Q, killactive"
           "$mod, F, exec, firefox"
           ", Print, exec, grimblast copy area"
