@@ -28,4 +28,4 @@ sudo nixos-generate-config --force
 sudo rm -rf /etc/nixos/configuration.nix
 
 # Executar home-manager e nixos-rebuild com o nome do host fornecido
-sudo nixos-rebuild switch --flake /etc/nixos#$NEWHOSTNAME && home-manager --flake /etc/nixos switch --experimental-features 'nix-command flakes'
+sudo nixos-rebuild switch --flake /etc/nixos#"$NEWHOSTNAME" && home-manager --flake /etc/nixos switch

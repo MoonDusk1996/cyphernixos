@@ -3,7 +3,6 @@
     ./packages
     ../../hardware-configuration.nix
   ];
-  boot.kernelPackages = pkgs.linuxPackages_zen;
 
   qt = {
     enable = true;
