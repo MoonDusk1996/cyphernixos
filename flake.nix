@@ -75,8 +75,5 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    hypr-dynamic-cursors = {
-      url = "github:VirtCode/hypr-dynamic-cursors";
-    };
   };
 }
