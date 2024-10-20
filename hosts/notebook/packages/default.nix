@@ -16,5 +16,17 @@
       xwayland.enable = true;
     };
   };
+
+  services.xserver.videoDrivers = [ "intel" ];
+
+  hardware = {
+    graphics = {
+      enable = true;
+    };
+    opengl = {
+      enable = true;
+    };
+  };
+
   services.gvfs.enable = true;
 }
