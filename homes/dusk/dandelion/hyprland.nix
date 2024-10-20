@@ -8,6 +8,7 @@
       "$mod" = "SUPER";
       "$terminal" = "alacritty";
       "$fileManager" = "pcmanfm";
+      "$browser" = "firefox";
 
       decoration = {
         rounding = "10";
@@ -24,7 +25,7 @@
       misc = {
         vfr = true;
       };
-      monitor = "Virtual-1, 1920x1080@60, 0x0, 1";
+      monitor = "preferred,auto,2";
       gestures = {
         workspace_swipe = true;
         workspace_swipe_touch = true;
@@ -33,7 +34,7 @@
         [
           "$mod, RETURN, exec, $terminal"
           "$mod, Q, killactive"
-          "$mod, F, exec, firefox"
+          "$mod, B, exec, $browser"
           "$mod, M, exit"
           ", Print, exec, grimblast copy area"
         ]
