@@ -3,7 +3,7 @@
     ./theme
     ./alacritty.nix
     # ./chromium.nix
-    ./cursor.nix
+    # ./cursor.nix
     ./firefox.nix
     ./git.nix
     ./hyprland.nix
