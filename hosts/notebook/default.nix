@@ -25,13 +25,6 @@
   };
 
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
-  environment.systemPackages = with pkgs; [
-    whois
-    xsel
-    xclip
-    udisks2
-    time
-  ];
   programs = {
     zsh.enable = true;
     dconf.enable = true;
@@ -41,5 +34,4 @@
     };
   };
   services.xserver.videoDrivers = [ "intel" ];
-  services.gvfs.enable = true;
 }

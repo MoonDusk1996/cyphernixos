@@ -67,6 +67,11 @@
     KERNEL=="ttyACM*", SUBSYSTEMS=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="55d4", MODE="0660", GROUP="plugdev", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="jade%n"
   '';
 
+  environment.systemPackages = with pkgs; [
+    udisks2
+  ];
+  services.gvfs.enable = true;
+
   # Version
   system.stateVersion = "24.05"; # Did you read the comment?
 }
