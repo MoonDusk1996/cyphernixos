@@ -1,8 +1,7 @@
-{
+{ pkgs, ... }: {
   imports = [
     ../../hardware-configuration.nix
   ];
-
   networking = {
     networkmanager.enable = true;
     hostName = "dandelion";
@@ -16,18 +15,6 @@
     };
   };
 
-  environment.sessionVariables.NIXOS_OZONE_WL = "1";
-  programs = {
-    zsh.enable = true;
-    dconf.enable = true;
-    hyprland = {
-      enable = true;
-      xwayland.enable = true;
-    };
-  };
-
-  services.xserver.videoDrivers = [ "intel" ];
-
   hardware = {
     graphics = {
       enable = true;
@@ -37,5 +24,22 @@
     };
   };
 
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
+  environment.systemPackages = with pkgs; [
+    whois
+    xsel
+    xclip
+    udisks2
+    time
+  ];
+  programs = {
+    zsh.enable = true;
+    dconf.enable = true;
+    hyprland = {
+      enable = true;
+      xwayland.enable = true;
+    };
+  };
+  services.xserver.videoDrivers = [ "intel" ];
   services.gvfs.enable = true;
 }

@@ -1,4 +1,9 @@
 { pkgs, ... }: {
+  boot.loader = {
+    systemd-boot.enable = true;
+    efi.canTouchEfiVariables = true;
+    systemd-boot.configurationLimit = 7;
+  };
   nix = {
     gc = {
       automatic = true;
