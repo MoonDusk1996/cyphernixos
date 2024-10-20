@@ -28,16 +28,17 @@
       name = "Adwaita";
     };
 
+    font = {
+      name = "Sans";
+      size = 11;
+    };
+
     # gtk3 = {
     #   extraConfig.gtk-application-prefer-dark-theme = true;
     # };
     # gtk4 = {
     #   extraConfig.gtk-application-prefer-dark-theme = true;
     # };
-  };
-  font = {
-    name = "Sans";
-    size = 11;
   };
   # GTK4 Setup
   # dconf.settings = {
