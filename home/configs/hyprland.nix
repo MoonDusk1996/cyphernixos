@@ -22,6 +22,7 @@
           "$mod, RETURN, exec, $terminal"
           "$mod, Q, killactive"
           "$mod, F, exec, firefox"
+          "$mod, M, exit"
           ", Print, exec, grimblast copy area"
         ]
         ++ (
