@@ -44,12 +44,18 @@
         "dusk@wired" = inputs.home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           extraSpecialArgs = { inherit inputs; };
-          modules = [ ./homes ];
+          modules = [
+            ./homes/dusk
+            ./homes/dusk/wired
+          ];
         };
         "dusk@dandelion" = inputs.home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           extraSpecialArgs = { inherit inputs; };
-          modules = [ ./homes ];
+          modules = [
+            ./homes/dusk
+            ./homes/dusk/dandelion
+          ];
         };
       };
     };

@@ -1,23 +1,21 @@
 { pkgs, ... }: {
   imports = [
-    ./gtk.nix
-    ./colorscheme.nix
     ./alacritty.nix
     # ./chromium.nix
+    ./colorscheme.nix
     ./firefox.nix
     ./git.nix
-    ./hyprland.nix
-    ./i3wm.nix
+    ./gtk.nix
     ./kde-connect.nix
+    # ./kdeglobals.nix
     ./nixvim.nix
-    ./picom.nix
-    ./polybar.nix
     ./ranger.nix
-    ./redshift.nix
     ./zsh.nix
   ];
   home.packages = with pkgs; [
+    # Dev
     # rustup
+
     # Tui
     btop
     neofetch
@@ -26,10 +24,7 @@
 
     # Gui
     vlc
-    volctl
     rofi
-    feh
-    flameshot
     obs-studio
     pavucontrol
     emote
@@ -39,13 +34,6 @@
     pcmanfm
   ];
 
-  dconf.settings = {
-    "org/virt-manager/virt-manager/connections" = {
-      autoconnect = [ "qemu:///system" ];
-      uris = [ "qemu:///system" ];
-    };
-  };
-
   # # Instalar toolchain padrão
   # home.activation = {
   #   installRustToolchain = ''
@@ -53,4 +41,24 @@
   #     ${pkgs.rustup}/bin/rustup component add clippy
   #   '';
   # };
+
+  # Let Home Manager install and manage itself.
+  programs.home-manager.enable = true;
+
+  # Home settings
+  home = {
+    # Home Manager needs a bit of information about you
+    username = "dusk";
+    homeDirectory = "/home/dusk";
+
+    # Environment
+    sessionVariables = {
+      EDITOR = "nvim";
+      BROWSER = "firefox";
+      TERMINAL = "alacritty";
+    };
+
+    # Version
+    stateVersion = "24.05"; # Please read the comment before changing.
+  };
 }
