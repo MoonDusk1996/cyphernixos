@@ -4,7 +4,6 @@
 }: {
   wayland.windowManager.hyprland = {
     enable = true;
-    plugins = [ inputs.hypr-dynamic-cursors.packages.${pkgs.system}.hypr-dynamic-cursors ];
     settings = {
       "$mod" = "SUPER";
       "$terminal" = "alacritty";
